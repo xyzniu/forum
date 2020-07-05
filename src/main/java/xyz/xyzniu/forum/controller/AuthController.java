@@ -2,6 +2,7 @@ package xyz.xyzniu.forum.controller;
 
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,13 +17,23 @@ public class AuthController {
     @Autowired
     private GitHubProvider gitHubProvider;
     
+    @Value("${github.client.id}")
+    private String clientId;
+    
+    @Value("${github.client.secret}")
+    private String clientSecret;
+    
+    @Value("${github.redirect.uri}")
+    private String redirectUri;
+    
+    
     @GetMapping("/callback")
     @ResponseBody
     public GitHubUser callback(@RequestParam("code") String code, @RequestParam("state") String state) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
-        accessTokenDTO.setClient_id("3d61b0f7ffc60eee5c18");
-        accessTokenDTO.setClient_secret("399bd0442c49e3c5ad892cfad9bc796e8bc55ec7");
-        accessTokenDTO.setRedirect_uri("http://localhost:8080/callback");
+        accessTokenDTO.setClient_id(clientId);
+        accessTokenDTO.setClient_secret(clientSecret);
+        accessTokenDTO.setRedirect_uri(redirectUri);
         accessTokenDTO.setState(state);
         accessTokenDTO.setCode(code);
         String accessToken = gitHubProvider.getAccessToken(accessTokenDTO);
