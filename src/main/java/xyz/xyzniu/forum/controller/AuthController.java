@@ -21,7 +21,6 @@ public class AuthController {
     @Autowired
     private GitHubProvider gitHubProvider;
     
-    @GetMapping("/callback")
     @ResponseBody
     public GitHubUser callback(
             @RequestParam(name = "code") String code,
