@@ -51,9 +51,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <div class="alert alert-danger" role="alert" th:if="${error}" th:text="${error}"></div>
             <h2><span class="glyphicon glyphicon-plus" aria-hidden="true">发起</span></h2>
             <hr>
-            <form action="">
+            <form action="/publish" method="post">
                 <div class="form-group">
                     <label for="title">问题标题</label>
                     <input type="text" class="form-control" id="title" name="title" placeholder="问题标题……">

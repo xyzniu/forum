@@ -4,8 +4,10 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 import xyz.xyzniu.forum.model.User;
 
+@Repository
 @Mapper
 public interface UserMapper {
     
