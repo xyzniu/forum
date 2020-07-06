@@ -6,12 +6,20 @@ import org.springframework.stereotype.Component;
 import xyz.xyzniu.forum.dto.AccessTokenDTO;
 import xyz.xyzniu.forum.dto.GitHubUser;
 
+<<<<<<< HEAD
+=======
+import java.io.IOException;
+
+>>>>>>> 4de9f9e18008bd62e593b18f6a55db0dbd720ffa
 @Component
 public class GitHubProvider {
     
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+<<<<<<< HEAD
         
+=======
+>>>>>>> 4de9f9e18008bd62e593b18f6a55db0dbd720ffa
         OkHttpClient client = new OkHttpClient();
         
         RequestBody body = RequestBody.create(JSON.toJSONString(accessTokenDTO), mediaType);
@@ -20,14 +28,21 @@ public class GitHubProvider {
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
+<<<<<<< HEAD
             return response.body().string().split("&")[0].split("=")[1];
         } catch (Exception e) {
             e.printStackTrace();
+=======
+            String access_token = response.body().string();
+            return access_token.split("&")[0].split("=")[1];
+        } catch (Exception e) {
+>>>>>>> 4de9f9e18008bd62e593b18f6a55db0dbd720ffa
         }
         return null;
     }
     
     public GitHubUser getUser(String accessToken) {
+<<<<<<< HEAD
         
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -41,5 +56,19 @@ public class GitHubProvider {
         }
         return null;
         
+=======
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://api.github.com/user?access_token=" + accessToken)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            String string = response.body().string();
+            GitHubUser gitHubUser = JSON.parseObject(string, GitHubUser.class);
+            return gitHubUser;
+        } catch (IOException e) {
+        }
+        return null;
+>>>>>>> 4de9f9e18008bd62e593b18f6a55db0dbd720ffa
     }
 }
