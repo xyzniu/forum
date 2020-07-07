@@ -1,9 +1,11 @@
-package xyz.xyzniu.forum.model;
+package xyz.xyzniu.forum.dto;
+
 
 import lombok.Data;
+import xyz.xyzniu.forum.model.User;
 
 @Data
-public class Publish {
+public class QuestionDTO {
     
     private Integer id;
     private String title;
@@ -15,5 +17,6 @@ public class Publish {
     private Integer viewCount;
     private Integer likeCount;
     private String tag;
-    
+    private User user;
+
 }

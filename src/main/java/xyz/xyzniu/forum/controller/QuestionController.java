@@ -6,21 +6,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import xyz.xyzniu.forum.mapper.PublishMapper;
-import xyz.xyzniu.forum.model.Publish;
+import xyz.xyzniu.forum.mapper.QuestionMapper;
+import xyz.xyzniu.forum.model.Question;
 import xyz.xyzniu.forum.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class PublishController {
+public class QuestionController {
     
     @Autowired
-    private PublishMapper publishMapper;
+    private QuestionMapper questionMapper;
     
     @GetMapping("/publish")
     public String publish() {
-        return "publish";
+        return "question";
     }
     
     @PostMapping("/publish")
@@ -31,33 +31,33 @@ public class PublishController {
                           HttpServletRequest request) {
         if (title == null || title.equals("")) {
             model.addAttribute("error", "请输入问题标题");
-            return "publish";
+            return "question";
         }
         if (description == null || description.equals("")) {
             model.addAttribute("error", "请输入问题描述");
-            return "publish";
+            return "question";
         }
         if (tag == null || tag.equals("")) {
             model.addAttribute("error", "请输入标签");
-            return "publish";
+            return "question";
         }
         
         User user = (User) request.getSession().getAttribute("user");
         
         if (user == null) {
             model.addAttribute("error", "请登陆后再试");
-            return "publish";
+            return "question";
         }
         
-        Publish publish = new Publish();
-        publish.setTitle(title);
-        publish.setDescription(description);
-        publish.setTag(tag);
-        publish.setCreator(user.getId());
-        publish.setGmtCreate(System.currentTimeMillis());
-        publish.setGmtModified(publish.getGmtCreate());
+        Question question = new Question();
+        question.setTitle(title);
+        question.setDescription(description);
+        question.setTag(tag);
+        question.setCreator(user.getId());
+        question.setGmtCreate(System.currentTimeMillis());
+        question.setGmtModified(question.getGmtCreate());
         
-        publishMapper.insertPublish(publish);
+        questionMapper.insertPublish(question);
         
         return "redirect:/";
     }
