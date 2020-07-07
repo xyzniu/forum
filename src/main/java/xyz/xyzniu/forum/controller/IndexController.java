@@ -10,8 +10,10 @@ import xyz.xyzniu.forum.dto.QuestionDTO;
 import xyz.xyzniu.forum.mapper.UserMapper;
 import xyz.xyzniu.forum.model.Pagination;
 import xyz.xyzniu.forum.model.User;
+import xyz.xyzniu.forum.model.UserExample;
 import xyz.xyzniu.forum.service.QuestionService;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -36,9 +38,11 @@ public class IndexController {
         if (cookies != null && cookies.length > 0) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
-                    User user = userMapper.findByToken(cookie.getValue());
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(cookie.getValue());
+                    List<User> users = userMapper.selectByExample(userExample);
+                    if (users.size() != 0) {
+                        request.getSession().setAttribute("user", users.get(0));
                     }
                     break;
                 }

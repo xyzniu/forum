@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import xyz.xyzniu.forum.mapper.QuestionMapper;
 import xyz.xyzniu.forum.model.Question;
+import xyz.xyzniu.forum.model.QuestionExample;
 import xyz.xyzniu.forum.model.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +58,7 @@ public class QuestionController {
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
         
-        questionMapper.insertPublish(question);
+        questionMapper.updateByExample(question, new QuestionExample());
         
         return "redirect:/";
     }
