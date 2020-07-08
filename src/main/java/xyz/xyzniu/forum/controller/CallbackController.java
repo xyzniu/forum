@@ -10,12 +10,10 @@ import xyz.xyzniu.forum.dto.GitHubUser;
 import xyz.xyzniu.forum.mapper.UserMapper;
 import xyz.xyzniu.forum.model.User;
 import xyz.xyzniu.forum.provider.GitHubProvider;
+import xyz.xyzniu.forum.service.UserService;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.text.CollationKey;
 import java.util.UUID;
 
 @Controller
@@ -36,11 +34,13 @@ public class CallbackController {
     @Autowired
     private UserMapper userMapper;
     
+    @Autowired
+    private UserService userService;
+    
     @GetMapping("/callback")
     public String callback(
             @RequestParam("code") String code,
             @RequestParam("state") String state,
-            HttpServletRequest request,
             HttpServletResponse response) {
         
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
@@ -59,9 +59,8 @@ public class CallbackController {
             user.setName(gitHubUser.getName());
             String token = UUID.randomUUID().toString();
             user.setToken(token);
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            userMapper.insert(user);
+            
+            userService.createOrUpdate(user);
             
             response.addCookie(new Cookie("token", token));
             
