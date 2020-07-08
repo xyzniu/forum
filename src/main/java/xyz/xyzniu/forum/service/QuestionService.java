@@ -42,4 +42,28 @@ public class QuestionService {
         return questionDTOList;
     }
     
+    public void insert(Question question) {
+        questionMapper.insert(question);
+    }
+    
+    public Question findById(Integer questionId) {
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andIdEqualTo(questionId);
+        List<Question> questions = questionMapper.selectByExampleWithBLOBs(questionExample);
+        if (questions.size() != 0) {
+            return questions.get(0);
+        }
+        return null;
+    }
+    
+    public void createOrUpdate(Question question, boolean isCreate) {
+        if (isCreate) {
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.insert(question);
+        } else {
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.updateByPrimaryKeySelective(question);
+        }
+    }
 }

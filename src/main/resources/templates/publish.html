@@ -48,29 +48,62 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <div class="alert alert-danger" role="alert" th:if="${error}" th:text="${error}"></div>
-            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true">问题页面</span></h2>
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true">发起</span></h2>
             <hr>
-            <div>
-                <p><span>问题标题：</span><span th:text="${question.getTitle()}"></span></p>
-                <p><span>问题描述：</span><span th:text="${question.getDescription()}"></span></p>
-                <p><span>问题标签：</span><span th:text="${question.getTag()}"></span></p>
-                <p th:if="${session.user != null && session.user.getId()==question.getCreator()}">
-                    <a th:href="@{'/publish/'+${question.getId()}}">编辑</a></p>
-            </div>
-        </div>
+            <form th:if="${question != null}" th:action="@{'/publish/'+${question.getId()}}" method="post">
+                <div class="form-group">
+                    <label for="title">问题标题</label>
+                    <input type="text" class="form-control" id="title" name="title" th:value="${question.getTitle()}"
+                           placeholder="问题标题……">
+                </div>
 
+                <div class="form-group">
+                    <label for="description">问题补充</label>
+                    <textarea cols="30" rows="10" class="form-control" id="description"
+                              th:text="${question.getDescription()}"
+                              name="description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="tag">问题标签</label>
+                    <input type="text" class="form-control" id="tag" name="tag" th:value="${question.getTag()}"
+                           placeholder="问题标签……">
+                </div>
+
+                <button type="submit" class="btn btn-success">发布</button>
+            </form>
+
+
+            <form th:if="${question==null}" action="/publish" method="post">
+                <div class="form-group">
+                    <label for="title">问题标题</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题……">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">问题补充</label>
+                    <textarea cols="30" rows="10" class="form-control" id="description" name="description"></textarea>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="tag">问题标签</label>
+                    <input type="text" class="form-control" id="tag" name="tag" placeholder="问题标签……">
+                </div>
+
+                <button type="submit" class="btn btn-success">发布</button>
+            </form>
+        </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>右侧</h3>
+            <h3>问题发起指南</h3>
             <p>...</p>
         </div>
     </div>
 </div>
-
 
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
