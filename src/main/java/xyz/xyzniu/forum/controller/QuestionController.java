@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import xyz.xyzniu.forum.exception.CustomizeErrorCode;
+import xyz.xyzniu.forum.exception.CustomizeException;
 import xyz.xyzniu.forum.model.Question;
 import xyz.xyzniu.forum.model.User;
 import xyz.xyzniu.forum.service.QuestionService;
@@ -87,11 +89,14 @@ public class QuestionController {
                              HttpSession session,
                              Model model) {
         User user = (User) session.getAttribute("user");
+        if (user == null) {
+            throw new CustomizeException(CustomizeErrorCode.USER_NOT_FOUND.getMessage());
+        }
+        
         Question question = questionService.findById(questionId);
         if (question != null) {
             if (question.getCreator() != user.getId()) {
-                model.addAttribute("error", "这不是您发布的问题，请重试");
-                return "/question/" + questionId;
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND.getMessage());
             } else {
                 model.addAttribute("question", question);
                 return "publish";
